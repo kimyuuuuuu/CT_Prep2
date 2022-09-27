@@ -1,33 +1,30 @@
 import heapq
 
 def solution(operations) :
-    numheap = []
+    min_numheap = []
+    max_numheap = []
 
     for i in operations:
         if i[0] == 'I' :
-            heapq.heappush(numheap, i[2:])
+            heapq.heappush(min_numheap, int(i[2:]))
+            heapq.heappush(max_numheap, (-int(i[2:]), int(i[2:])))
         
-        elif i[0] == 'D' and len(numheap) != 0:
-            if i[2] == '-':
-                heapq.heappop(numheap)
+        elif i[0] == 'D' and len(min_numheap) != 0:
+            if i[2] == "1":
+                heapq.heappop(max_numheap)
+                min_numheap.pop()
             
-            elif i[2] == '1':
-                numheap = heapq.nlargest(len(numheap), numheap)
-                heapq.heapify(numheap)
-                #heapq.heappop(numheap)
-                numheap = heapq.nsmallest(len(numheap), numheap)
-            
-        elif len(numheap) == 0 :
-            continue
-        
-        print(numheap)
+            else :
+                heapq.heappop(min_numheap)
+                max_numheap.pop()
 
-    if len(numheap) == 0 :
+    if len(min_numheap) == 0 :
         return [0,0]
     
     else :
-        return [numheap[-1], numheap[0]]
+        min_numheap.sort()
+        return [min_numheap[-1], min_numheap[0]]
 
 
-operations = ["I -45", "I 653", "D 1", "I -642", "I 45", "I 97", "D 1", "D -1", "I 333"]
+operations = ["I 4", "I -1", "I 6", "I 3"]
 print(solution(operations))
